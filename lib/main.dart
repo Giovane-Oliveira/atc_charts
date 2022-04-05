@@ -3,6 +3,8 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -10,10 +12,11 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ATC Charts',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -26,7 +29,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.wewqewe
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'ATC Charts Home Page'),
     );
   }
 }
@@ -52,6 +55,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late List<SalesData> _chartData;
   late TooltipBehavior _tooltipBehavior;
+
+   _recuperarDados() async {
+
+    String url = "http://192.168.200.11/read.php";
+    http.Response response;
+    response = await http.get(Uri.parse(url));
+    Map<String, dynamic> retorno = json.decode( response.body );
+    String empresa = retorno["cod_empresa"].toString();
+    String carga = retorno["cod_carga"].toString();
+    print("Empresa $empresa");
+    print("Carga $carga");
+
+  }
 
   @override
   void initState() {
@@ -88,10 +104,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<SalesData> getChartData() {
+
+    _recuperarDados();
     final List<SalesData> chartData = [
       SalesData(2016, 25.50),
       SalesData(2017, 12),
-      SalesData(2018, 24),
+      SalesData(2018, 40),
       SalesData(2019, 18),
       SalesData(2020, 30)
     ];
