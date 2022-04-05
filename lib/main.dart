@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'ATC Charts',
       theme: ThemeData(
@@ -48,6 +49,7 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -55,10 +57,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late List<SalesData> _chartData;
   late TooltipBehavior _tooltipBehavior;
+  static String t = "";
 
    _recuperarDados() async {
 
-    String url = "http://192.168.200.11/read.php";
+    String url = "http://192.168.200.11/read.php?tipo=consultar";
     http.Response response;
     response = await http.get(Uri.parse(url));
     Map<String, dynamic> retorno = json.decode( response.body );
@@ -66,6 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
     String carga = retorno["cod_carga"].toString();
     print("Empresa $empresa");
     print("Carga $carga");
+     t = empresa;
+
 
   }
 
@@ -106,8 +111,9 @@ class _MyHomePageState extends State<MyHomePage> {
   List<SalesData> getChartData() {
 
     _recuperarDados();
+
     final List<SalesData> chartData = [
-      SalesData(2016, 25.50),
+      SalesData(2016, double.parse(t)),
       SalesData(2017, 12),
       SalesData(2018, 40),
       SalesData(2019, 18),
@@ -122,5 +128,19 @@ class SalesData {
 
   final double year;
   final double sales;
+
+}
+
+class Objeto{
+  late String _valor;
+
+  String get valor => _valor;
+
+  set valor(String value) {
+    _valor = value;
+  }
+
+
+
 
 }
